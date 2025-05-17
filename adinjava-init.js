@@ -96,3 +96,17 @@ function sendVerificationEmail() {
       .catch((error) => alert("Gagal kirim verifikasi: " + error.message));
   }
 }
+
+function showNotification(message, isError = false) {
+  const notif = document.getElementById("notification");
+  if (!notif) return;
+
+  notif.innerText = message;
+  notif.style.backgroundColor = isError ? "#f44336" : "#4CAF50";
+  notif.style.display = "block";
+
+  setTimeout(() => {
+    notif.style.display = "none";
+  }, 4000);
+}
+
