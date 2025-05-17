@@ -1,3 +1,4 @@
+
 // Inisialisasi Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCLzGkG5xGGW2G2H0Oen0guG3FnfL7hY4g",
@@ -12,35 +13,29 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Cek status login
 auth.onAuthStateChanged(async (user) => {
   const currentPage = window.location.pathname;
-
   if (user) {
     const userDoc = await db.collection("users").doc(user.uid).get();
     const userData = userDoc.data();
     const name = user.displayName || userData?.name || "Pengguna";
     const status = userData?.status || "member";
 
-    // Tampilkan nama dan status
     const nameEl = document.getElementById("userName");
     const statusEl = document.getElementById("userStatus");
     if (nameEl) nameEl.textContent = name;
     if (statusEl) statusEl.textContent = status;
 
-    // Redirect jika di halaman login/register
     if (currentPage.includes("login") || currentPage.includes("register")) {
       window.location.href = "/p/dashboard.html";
     }
   } else {
-    // Jika tidak login, arahkan ke login (kecuali di halaman login/register)
     if (!currentPage.includes("login") && !currentPage.includes("register")) {
       window.location.href = "/p/login.html";
     }
   }
 });
 
-// Fungsi Login
 function login(email, password) {
   auth.signInWithEmailAndPassword(email, password)
     .then(() => {
@@ -51,7 +46,6 @@ function login(email, password) {
     });
 }
 
-// Fungsi Logout
 function logout() {
   auth.signOut()
     .then(() => {
@@ -62,13 +56,11 @@ function logout() {
     });
 }
 
-// Fungsi Register
 function register(email, password, name) {
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
       const user = userCredential.user;
       return user.updateProfile({ displayName: name }).then(() => {
-        // Simpan data ke Firestore
         return db.collection("users").doc(user.uid).set({
           name: name,
           email: email,
@@ -86,7 +78,6 @@ function register(email, password, name) {
     });
 }
 
-// Fungsi Reset Password
 function resetPassword(email) {
   auth.sendPasswordResetEmail(email)
     .then(() => {
@@ -97,7 +88,6 @@ function resetPassword(email) {
     });
 }
 
-// Fungsi Kirim Verifikasi Email
 function sendVerificationEmail() {
   const user = auth.currentUser;
   if (user) {
