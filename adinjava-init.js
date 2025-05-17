@@ -46,14 +46,14 @@ function login(email, password) {
     });
 }
 
+// Fungsi Logout
 function logout() {
-  auth.signOut()
-    .then(() => {
-      window.location.href = "/p/login.html";
-    })
-    .catch((error) => {
-      alert("Gagal logout: " + error.message);
-    });
+  auth.signOut().then(() => {
+    window.location.href = "/p/login.html"; // arahkan ke halaman login setelah logout
+  }).catch((error) => {
+    console.error("Gagal logout:", error);
+    alert("Terjadi kesalahan saat logout.");
+  });
 }
 
 function register(email, password, name) {
